@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
-export class PostService {
+export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
 
@@ -29,6 +29,21 @@ export class PostService {
         this.posts = transformedPosts;
         this.postsUpdated.next([...this.posts]);
       });
+  }
+
+  getPost(id: string) {
+    return { ...this.posts.find(p => p.id == id) };
+  }
+
+  updatePost(id: string, title: string, content: string) {
+    const post: Post = {
+      id: id,
+      title: title,
+      content: content
+    };
+    this.http
+      .put("http://localhost:3000/api/posts/" + id, post)
+      .subscribe(Response => console.log(Response));
   }
 
   getPostUpdateListener() {
