@@ -9,7 +9,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://JawadAhmed:A3Z2EcSAG7LXrKSl@cluster0-bfwth.mongodb.net/node-angular?retryWrites=true&w=majority",
+    "mongodb+srv://JawadAhmed:A3Z2EcSAG7LXrKSl@cluster0-bfwth.mongodb.net/test?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -17,7 +17,7 @@ mongoose
     }
   )
   .then(() => {
-    console.log("Connection to database successful");
+    console.log("Connected to database!");
   })
   .catch(() => {
     console.log("Connection failed!");
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });

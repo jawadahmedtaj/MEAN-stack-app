@@ -14,7 +14,7 @@ const MIME_TYPE_MAP = {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = MIME_TYPE_MAP[file.mimetype];
-    let error = new Error("Invalid mime type!");
+    let error = new Error("Invalid mime type");
     if (isValid) {
       error = null;
     }
@@ -52,6 +52,28 @@ router.post(
   }
 );
 
+router.put(
+  "/:id",
+  multer({ storage: storage }).single("image"),
+  (req, res, next) => {
+    let imagePath = req.body.imagePath;
+    if (req.file) {
+      const url = req.protocol + "://" + req.get("host");
+      imagePath = url + "/images/" + req.file.filename
+    }
+    const post = new Post({
+      _id: req.body.id,
+      title: req.body.title,
+      content: req.body.content,
+      imagePath: imagePath
+    });
+    console.log(post);
+    Post.updateOne({ _id: req.params.id }, post).then(result => {
+      res.status(200).json({ message: "Update successful!" });
+    });
+  }
+);
+
 router.get("", (req, res, next) => {
   Post.find().then(documents => {
     res.status(200).json({
@@ -71,36 +93,11 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.put(
-  "/:id",
-  multer({ storage: storage }).single("image"),
-  (req, res, next) => {
-    let imagePath = req.body.imagePath;
-    if (req.file) {
-      const url = req.protocol + "://" + req.get("host");
-      imagePath: url + "/images/" + req.file.filename;
-    }
-    const post = new Post({
-      _id: req.body.id,
-      title: req.body.title,
-      content: req.body.content,
-      imagePath: imagePath
-    });
-    Post.updateOne({ _id: req.params.id }, post).then(result => {
-      res.status(299).json({ message: "Update successful!" });
-    });
-  }
-);
-
 router.delete("/:id", (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id })
-    .then(result => {
-      console.log(result);
-      res.status(200).json({ message: "Post deleted" });
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  Post.deleteOne({ _id: req.params.id }).then(result => {
+    console.log(result);
+    res.status(200).json({ message: "Post deleted!" });
+  });
 });
 
 module.exports = router;

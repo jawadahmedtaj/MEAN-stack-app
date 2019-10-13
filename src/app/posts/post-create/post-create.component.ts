@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
-import { PostsService } from "../post.service";
+import { PostsService } from "../posts.service";
 import { Post } from "../post.model";
 import { mimeType } from "./mime-type.validator";
 
@@ -12,6 +12,8 @@ import { mimeType } from "./mime-type.validator";
   styleUrls: ["./post-create.component.css"]
 })
 export class PostCreateComponent implements OnInit {
+  enteredTitle = "";
+  enteredContent = "";
   post: Post;
   isLoading = false;
   form: FormGroup;
@@ -29,9 +31,7 @@ export class PostCreateComponent implements OnInit {
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
       }),
-      content: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(10)]
-      }),
+      content: new FormControl(null, { validators: [Validators.required] }),
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType]
@@ -65,9 +65,7 @@ export class PostCreateComponent implements OnInit {
 
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({
-      image: file
-    });
+    this.form.patchValue({ image: file });
     this.form.get("image").updateValueAndValidity();
     const reader = new FileReader();
     reader.onload = () => {
