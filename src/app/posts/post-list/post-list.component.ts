@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription } from "rxjs";
 import { PageEvent } from "@angular/material";
+import { Subscription } from "rxjs";
 
 import { Post } from "../post.model";
 import { PostsService } from "../posts.service";
-import { AuthService } from "src/app/auth/auth.service";
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
   selector: "app-post-list",
@@ -18,11 +18,11 @@ export class PostListComponent implements OnInit, OnDestroy {
   //   { title: "Third Post", content: "This is the third post's content" }
   // ];
   posts: Post[] = [];
+  isLoading = false;
   totalPosts = 0;
-  postsPerPage = 10;
+  postsPerPage = 2;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
-  isLoading = false;
   userIsAuthenticated = false;
   userId: string;
   private postsSub: Subscription;
@@ -39,10 +39,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.userId = this.authService.getUserId();
     this.postsSub = this.postsService
       .getPostUpdateListener()
-      .subscribe((postsData: { posts: Post[]; postCount: number }) => {
+      .subscribe((postData: { posts: Post[]; postCount: number }) => {
         this.isLoading = false;
-        this.totalPosts = postsData.postCount;
-        this.posts = postsData.posts;
+        this.totalPosts = postData.postCount;
+        this.posts = postData.posts;
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
@@ -62,14 +62,11 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   onDelete(postId: string) {
     this.isLoading = true;
-    this.postsService.deletePost(postId).subscribe(
-      () => {
-        this.postsService.getPosts(this.postsPerPage, this.currentPage);
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+    this.postsService.deletePost(postId).subscribe(() => {
+      this.postsService.getPosts(this.postsPerPage, this.currentPage);
+    }, () => {
+      this.isLoading = false;
+    });
   }
 
   ngOnDestroy() {
