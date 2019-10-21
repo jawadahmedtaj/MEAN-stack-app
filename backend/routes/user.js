@@ -19,7 +19,9 @@ router.post("/signup", (req, res, next) => {
       });
     })
     .catch(err => {
-      res.status(500).json({ error: err });
+      res.status(500).json({
+        message: "Invalid authentication credentials!"
+      });
     });
 });
 
@@ -37,7 +39,7 @@ router.post("/login", (req, res, next) => {
       if (!result) {
         return res
           .status(401)
-          .json({ message: "Login failed, incorrect password" });
+          .json({ message: "Login failed, please check password/email" });
       }
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
@@ -53,7 +55,7 @@ router.post("/login", (req, res, next) => {
     .catch(err => {
       return res
         .status(401)
-        .json({ message: "Login failed, incorrect password" });
+        .json({ message: "Invalid authentication credentials!" });
     });
 });
 
