@@ -10,7 +10,9 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://JawadAhmed:A3Z2EcSAG7LXrKSl@cluster0-bfwth.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb+srv://JawadAhmed:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0-bfwth.mongodb.net/test?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useCreateIndex: true,
