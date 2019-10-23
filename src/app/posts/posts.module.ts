@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
 import { PostCreateComponent } from "./post-create/post-create.component";
@@ -13,8 +13,7 @@ import { AngularMaterialModule } from "../angular-material.module";
     CommonModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    RouterModule,
-    FormsModule
+    RouterModule
   ]
 })
 export class PostsModule {}

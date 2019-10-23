@@ -3,8 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { environment } from "../../environments/environment";
 
+import { environment } from "../../environments/environment";
 import { Post } from "./post.model";
 
 const BACKEND_URL = environment.apiUrl + "/posts/";
@@ -67,7 +67,10 @@ export class PostsService {
     postData.append("content", content);
     postData.append("image", image, title);
     this.http
-      .post<{ message: string; post: Post }>(BACKEND_URL, postData)
+      .post<{ message: string; post: Post }>(
+        BACKEND_URL,
+        postData
+      )
       .subscribe(responseData => {
         this.router.navigate(["/"]);
       });
@@ -90,9 +93,11 @@ export class PostsService {
         creator: null
       };
     }
-    this.http.put(BACKEND_URL + id, postData).subscribe(response => {
-      this.router.navigate(["/"]);
-    });
+    this.http
+      .put(BACKEND_URL + id, postData)
+      .subscribe(response => {
+        this.router.navigate(["/"]);
+      });
   }
 
   deletePost(postId: string) {

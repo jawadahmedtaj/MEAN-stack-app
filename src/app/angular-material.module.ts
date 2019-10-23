@@ -19,7 +19,7 @@ import {
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
   ]
 })
 export class AngularMaterialModule {}
